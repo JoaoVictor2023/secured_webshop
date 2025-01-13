@@ -1,5 +1,5 @@
 module.exports = {
     get: (req, res) => {
-        res.send("User: Sarah Test");
+        res.send("User: João Test");
     }
 };
