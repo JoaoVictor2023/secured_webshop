@@ -1,4 +1,3 @@
-/app/node_modules/
-/app/Documentation/
+node_modules/
 /secured_webshop.iml
 /.idea/
