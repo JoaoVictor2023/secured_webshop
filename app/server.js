@@ -2,7 +2,7 @@
 const express = require('express');
 const fs = require('fs');
 const https = require('https');
-
+const path = require('path');
 // Charger les clés SSL
 const privateKey = fs.readFileSync('../privkey.key', 'utf8');
 const certificate = fs.readFileSync('../certificate.crt', 'utf8');
