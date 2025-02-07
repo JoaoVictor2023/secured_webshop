@@ -1,5 +1,5 @@
 module.exports = {
     get: (req, res) => {
-        res.send("User: João Test");
+        res.sendFile('login.html', { root: './view' });  // Page de connexion
     }
 };
