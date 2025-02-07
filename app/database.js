@@ -3,14 +3,16 @@ const mysql = require('mysql');
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '',
-    database: 'test',  // Nom de ta base de données
+    password: 'root',
+    database: 'db_SecuWeb',  // Nom de ta base de données
 });
 
 db.connect((err) => {
-    if (err)  err;
-    console.log('Base de données connectée avec succès !');
+   // if (err) {
+   //     console.error("Erreur de connexion à la base de données :", err);
+   //     return;
+   // }
 });
 
 module.exports = db;
- 
+    
