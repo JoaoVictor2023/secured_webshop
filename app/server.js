@@ -3,6 +3,7 @@ const express = require('express');
 const fs = require('fs');
 const https = require('https');
 const path = require('path');
+const bcrypt = require('bcryptjs'); // Pour comparer et hacher les mots de passe
 // Charger les clés SSL
 const privateKey = fs.readFileSync('../privkey.key', 'utf8');
 const certificate = fs.readFileSync('../certificate.crt', 'utf8');
@@ -17,7 +18,10 @@ const exp = require('constants');
 app.use('/user', userRoute);
 
 // Créer le serveur HTTPS
+
 const httpsServer = https.createServer(credentials, app);
+
+const db = require('./database'); // Connexion à la base de données
 
 // Démarrage du serveur
 httpsServer.listen(443, () => {

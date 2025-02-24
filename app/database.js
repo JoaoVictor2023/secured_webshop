@@ -1,16 +1,11 @@
-const mysql = require('mysql');
+const mysql = require('mysql2')
 
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'test',  // Nom de ta base de données
+// Informations de connexion pour la db
+ const db = mysql.createConnection({
+  host: 'localhost',
+  port: '6033',
+  user: 'root',
+  password: 'root',
+  database: 'db_SecuWeb',
 });
-
-db.connect((err) => {
-    if (err)  err;
-    console.log('Base de données connectée avec succès !');
-});
-
-module.exports = db;
- 
+module.exports = db
