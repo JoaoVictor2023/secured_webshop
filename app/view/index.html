@@ -3,9 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Home</title>
 </head>
 <body>
-    <p> Bienvenue </p>
+    <p id="welcome-message">Bienvenue</p>
+
+    <!-- Bouton pour accéder à l'administration (affiché uniquement si l'utilisateur est admin) -->
+    <button id="admin-button" style="display:none;" onclick="window.location.href='/user/admin'">Accéder à l'administration</button>
+
+    <script>
+        fetch('/user/session')
+            .then(response => response.json())
+            .then(data => {
+                const welcomeMessage = document.getElementById('welcome-message');
+                const adminButton = document.getElementById('admin-button');
+                
+                if (data.email) {
+                    welcomeMessage.textContent = `Bienvenue ${data.email}`;
+                    
+                    // Afficher le bouton d'administration si l'utilisateur est un admin
+                    if (data.role === 'admin') {
+                        adminButton.style.display = 'inline-block';
+                    }
+                }
+            })
+            .catch(error => console.error('Erreur:', error));
+    </script>
+
 </body>
 </html>

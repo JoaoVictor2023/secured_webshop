@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration - Liste des utilisateurs</title>
+</head>
+<body>
+    <h1>Gestion des utilisateurs</h1>
+
+    <!-- Formulaire de recherche -->
+    <input type="text" id="search-email" placeholder="Rechercher par email">
+    <button onclick="searchUsers()">Rechercher</button>
+
+    <h2>Liste des utilisateurs</h2>
+    <ul id="user-list"></ul>
+    
+    <script>
+        // Fonction pour rechercher les utilisateurs
+        function searchUsers() {
+            const email = document.getElementById('search-email').value;
+            fetch(`/user/admin/users/search?email=${email}`)
+                .then(response => response.json())
+                .then(data => {
+                    displayUsers(data);
+                })
+                .catch(error => console.error('Erreur:', error));
+        }
+
+        // Fonction pour afficher la liste des utilisateurs
+        function displayUsers(users) {
+            const userList = document.getElementById('user-list');
+            userList.innerHTML = ''; // Vider la liste actuelle
+
+            users.forEach(user => {
+                const li = document.createElement('li');
+                li.textContent = `Email: ${user.email}, Rôle: ${user.role}`;
+                userList.appendChild(li);
+            });
+        }
+
+        // Charger la liste des utilisateurs au chargement de la page
+        fetch('/user/admin/users')
+            .then(response => response.json())
+            .then(data => {
+                displayUsers(data);
+            })
+            .catch(error => console.error('Erreur:', error));
+    </script>
+</body>
+</html>
