@@ -5,7 +5,7 @@ module.exports = {
     home: (req, res) => {
         res.sendFile('index.html', { root: './view' });  // Page d'accueil pour les utilisateurs
     },
-    homeAdmin: (req, res) => {
+    Admin: (req, res) => {
         res.sendFile('admin.html', { root: './view' });  // Page d'administration pour les admins
     },
     signup: (req, res) => {

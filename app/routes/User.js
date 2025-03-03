@@ -3,6 +3,8 @@ const router = express.Router();
 const sql = require('mysql2');
 const db = require('../database'); // Connexion à la base de données
 const bcrypt = require('bcryptjs'); // Pour comparer et hacher les mots de passe
+const path = require('path');
+
 
 // Contrôleur pour afficher la page de connexion
 const controller = require("../controllers/UserController");
@@ -64,10 +66,12 @@ router.get('/home', (req, res) => {
 
 // Route pour la page admin.html (uniquement pour les administrateurs)
 router.get('/admin.html', (req, res) => {
+    console.log("Accès à /admin.html - Session:", req.session.user);
     if (req.session.user && req.session.user.role === 'admin') {
-        res.sendFile(path.join(__dirname, 'public', 'admin.html'));  // Remplace par le chemin correct
+        res.sendFile(path.join(__dirname, '../view', 'admin.html')); // Assure-toi que le chemin est correct
     } else {
-        res.redirect('/home');  // Si l'utilisateur n'est pas admin, redirige vers la page d'accueil
+        console.log("Redirection car pas admin");
+        res.redirect('/user/home');
     }
 });
 
@@ -209,8 +213,9 @@ router.post('/', (req, res) => {
         const user = results[0];
 
         const match = await bcrypt.compare(password, user.mdpHash);
+
         if (match) {
-            req.session.user = { email: user.email }; // Stocke l'email dans la session
+            req.session.user = { email: user.email, role: user.role }; // Stocke aussi le rôle
             return res.redirect('/user/home');
         } else {
             return res.status(401).send('Mot de passe incorrect');
