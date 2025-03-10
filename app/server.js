@@ -31,6 +31,10 @@ app.use(cookieParser()); // Utiliser cookie-parser
 
 app.use(express.urlencoded({extended: true}))
 app.use(express.json()); // Pour traiter les données JSON
+
+// Ajouter cette ligne pour servir les fichiers statiques du dossier public
+app.use(express.static(path.join(__dirname, '../public')));
+
 const userRoute = require('./routes/User');
 const exp = require('constants');
 app.use('/user', userRoute);
