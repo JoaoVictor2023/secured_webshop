@@ -47,11 +47,6 @@ router.get('/admin', authenticateToken, (req, res) => {
         });
 });
 
-// Route pour se déconnecter
-router.get('/logout', (req, res) => {
-    res.clearCookie('token');
-    res.json({ success: true, message: 'Déconnexion réussie' });
-});
 
 router.get('/session', (req, res) => {
     if (req.session.user) {
@@ -92,6 +87,25 @@ router.get('/admin/users', authenticateToken, (req, res) => {
             }
             res.json(users); // Retourne la liste des utilisateurs
         });
+    });
+});
+
+// Route pour récupérer l'ID de l'utilisateur à partir de son email
+router.get('/getUserId/:email', authenticateToken, (req, res) => {
+    const email = req.params.email;
+    
+    const query = 'SELECT idUser FROM t_users WHERE email = ?';
+    db.query(query, [email], (err, results) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Erreur lors de la récupération de l\'ID');
+        }
+
+        if (results.length === 0) {
+            return res.status(404).send('Utilisateur non trouvé');
+        }
+
+        res.json({ id: results[0].idUser });
     });
 });
 
@@ -168,5 +182,43 @@ router.post('/', (req, res) => {
         }
     });
 });
+
+
+// Route pour se déconnecter
+router.get('/logout', (req, res) => {
+    res.clearCookie('token');
+    res.redirect('/user');
+});
+
+// Route pour afficher le profil d'un utilisateur
+router.get('/:id', authenticateToken, (req, res) => {
+    const userId = req.params.id;
+    const currentUserEmail = req.user.email;
+    const currentUserRole = req.user.role;
+
+    // Vérifier si l'utilisateur actuel est autorisé à voir ce profil
+    const query = 'SELECT idUser, email, role FROM t_users WHERE idUser = ?';
+    db.query(query, [userId], (err, results) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Erreur lors de la récupération du profil');
+        }
+
+        if (results.length === 0) {
+            return res.status(404).send('Utilisateur non trouvé');
+        }
+
+        const profileUser = results[0];
+
+        // Vérifier si l'utilisateur actuel est admin ou le propriétaire du profil
+        if (currentUserRole !== 'admin' && currentUserEmail !== profileUser.email) {
+            return res.status(403).send('Accès non autorisé');
+        }
+
+        // Rendre la vue avec les données de l'utilisateur
+        res.render('profile', { user: profileUser });
+    });
+});
+
 
 module.exports = router;
