@@ -2,3 +2,5 @@
 /app/Documentation/
 /secured_webshop.iml
 /.idea/
+.env
+

@@ -43,8 +43,8 @@
             if (data.success) {
                 alert('Compte créé avec succès ! Redirection...');
                 setTimeout(() => {
-                    window.location.href = data.redirect;
-                }, 1);
+                    window.location.href = '/user/home';
+                }, 1000);
             } else {
                 alert('Erreur lors de l\'inscription.');
             }

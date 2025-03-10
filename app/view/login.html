@@ -11,7 +11,7 @@
         <div class="card">
             <div class="card-body">
                 <h2>Login</h2>
-                <form action="/user" method="POST">
+                <form id="login-form">
                     <div class="form-group">
                         <label for="exampleInputEmail1">Email address</label>
                         <input type="email" class="form-control col-lg-9" id="exampleInputEmail1"
@@ -27,5 +27,31 @@
             </div>
         </div>
     </div>
+    <script>
+    document.getElementById('login-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const email = document.querySelector('input[name="email"]').value;
+        const password = document.querySelector('input[name="password"]').value;
+
+        fetch('/user', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Connexion réussie ! Redirection...');
+                setTimeout(() => {
+                    window.location.href = '/user/home';
+                }, 1000);
+            } else {
+                alert('Erreur lors de la connexion.');
+            }
+        })
+        .catch(error => console.error('Erreur:', error));
+    });
+    </script>
 </body>
 </html>

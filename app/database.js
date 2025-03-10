@@ -8,4 +8,5 @@ const mysql = require('mysql2')
   password: 'root',
   database: 'db_SecuWeb',
 });
+
 module.exports = db

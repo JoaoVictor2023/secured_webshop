@@ -1,34 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Page d'accueil</title>
 </head>
-<body>
-    <p id="welcome-message">Bienvenue</p>
 
-    <!-- Bouton pour accéder à l'administration (affiché uniquement si l'utilisateur est admin) -->
-    <button id="admin-button" style="display:none;" onclick="window.location.href='/user/admin'">Accéder à l'administration</button>
+<body>
+    <h1 id="welcome-message">Bienvenue !</h1>
+    <p>C'est la page d'accueil.</p>
+
+    <div id="admin-link" style="display: none;">
+        <a href="/user/admin">Accéder à la page d'administration</a>
+    </div>
+
+    <p><a href="/logout">Se déconnecter</a></p>
 
     <script>
-        fetch('/user/session')
+        const token = localStorage.getItem('token');
+        fetch('/api/user', {
+            headers: { 'Authorization': token }
+        })
             .then(response => response.json())
             .then(data => {
-                const welcomeMessage = document.getElementById('welcome-message');
-                const adminButton = document.getElementById('admin-button');
-                
                 if (data.email) {
-                    welcomeMessage.textContent = `Bienvenue ${data.email}`;
-                    
-                    // Afficher le bouton d'administration si l'utilisateur est un admin
-                    if (data.role === 'admin') {
-                        adminButton.style.display = 'inline-block';
-                    }
+                    document.getElementById('welcome-message').textContent = `Bienvenue, ${data.email}!`;
+                }
+                if (data.role === 'admin') {
+                    document.getElementById('admin-link').style.display = 'block';
                 }
             })
             .catch(error => console.error('Erreur:', error));
     </script>
-
 </body>
+
 </html>
